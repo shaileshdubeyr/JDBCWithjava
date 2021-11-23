@@ -1,9 +1,6 @@
 package com.jdbc;
 
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Enumeration;
 
 public class JDBCConnection {
@@ -13,19 +10,28 @@ public class JDBCConnection {
         String userName = "root";
         String password = "shailesh@96";
         Connection connection = null;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Driver loaded");
-        } catch (ClassNotFoundException e) {
-            throw new IllegalStateException("Cannot find the driver in the classpath", e);
+        String sql = "select * from emplyees";
 
-        }
-        listDrivers();
         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.println("Driver loaded");
+            listDrivers();
             connection = DriverManager.getConnection(jdbcURL, userName, password);
             System.out.println("Connection is successfull " + connection);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("Cannot find the driver in the classpath", e);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("the connection not built");
+        }
+        PreparedStatement statement = connection.prepareStatement(sql);
+        ResultSet resultSet= statement.executeQuery();
+        while (resultSet.next()){
+            int id = resultSet.getInt("id");
+            String name = resultSet.getString("name");
+            Double salary = resultSet.getDouble("salary");
+            Date date = resultSet.getDate("start");
+            System.out.println(id + "\t\t" + name
+                    + "\t\t" + salary+"\t\t"+date);
         }
         connection.close();
     }
