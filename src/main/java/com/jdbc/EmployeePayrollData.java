@@ -17,7 +17,7 @@ public class EmployeePayrollData {
 
     public EmployeePayrollData(Integer id, String name, Double salary, LocalDate date) {
         this(id, name, salary);
-        LocalDate localDate = date;
+        this.date = date;
     }
 
     @Override
