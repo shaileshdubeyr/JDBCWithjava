@@ -17,7 +17,6 @@ public class EmployeePayrollService {
     }
 
     public List<EmployeePayrollData> readEmployeePayRoll(){
-        this.employeePayRollList = new EmloyeepayrollDBService().readData();
         this.employeePayRollList = EmloyeepayrollDBService.getInstance().readData();
         return employeePayRollList;
     }
@@ -39,5 +38,9 @@ public class EmployeePayrollService {
     public boolean checkEmployeePayrollInSyncWithDB(String name) {
         List<EmployeePayrollData> employeePayrollDataList =employeePayrollDBService.getEmployeePayrollData(name);
         return employeePayrollDataList.get(0).equals(getEmployeePayRollData(name));
+    }
+
+    public void readEmployeePayroll() {
+
     }
 }

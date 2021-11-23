@@ -1,6 +1,7 @@
 package com.jdbc;
 
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -77,13 +78,28 @@ public class EmloyeepayrollDBService {
         }
         return employeePayrollList;
     }
+    public List<EmployeePayrollData> getEmployeeForDateRange(LocalDate startDate, LocalDate endDate) {
+        String sql = String.format("SELECT * from emplyees WHERE START BETWEEN '%s' AND '%s';", Date.valueOf(startDate), Date.valueOf(endDate));
+        return this.getEmployeePayrollDataUsingDB(sql);
+    }
 
+    private List<EmployeePayrollData> getEmployeePayrollDataUsingDB(String sql) {
+        List<EmployeePayrollData> payrollDataList = new ArrayList<>();
+        try (Connection connection = this.getConnection()) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            payrollDataList = this.getEmployeePayrollData(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return payrollDataList;
+    }
 
     public int updateEmployeeData(String name, double salary) {
         return this.updateEmployeeDataUsingStatement(name, salary);
     }
 
-    private int updateEmployeeDataUsingStatement(String name, double salary) {
+    public int updateEmployeeDataUsingStatement(String name, double salary) {
         String sql = String.format("update emplyees set salary = %.2f where name = '%s';",salary,name);
         try (Connection connection = this.getConnection()){
             Statement statement = connection.createStatement();
@@ -125,5 +141,8 @@ public class EmloyeepayrollDBService {
         }
         System.out.println("Connection is successfull !!" +con);
         return con;
+    }
+    public List<EmployeePayrollData> readEmployeePayRollForDateRange(LocalDate startDate, LocalDate endDate) {
+        return employeePayrollDBService.getEmployeeForDateRange(startDate, endDate);
     }
 }
