@@ -33,7 +33,7 @@ public class EmployeePayrollData {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof EmployeePayrollData)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         EmployeePayrollData that = (EmployeePayrollData) o;
         return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(salary, that.salary) && Objects.equals(date, that.date);
     }
